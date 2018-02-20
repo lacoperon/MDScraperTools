@@ -1,0 +1,23 @@
+Package: MDScraperTools
+Title: R Package for Molecular Dynamics-related scraping and related big data analysis
+Version: 0.0.0.9000
+Authors@R: person("Elliot", "Williams", email = "ejwilliams@wesleyan.edu", role = c("aut", "cre"))
+Description: This package contains functions for working with large collections of PDB files.
+    It provides methods for scraping structure results from RCSB, scraping relevant 
+    information about said structures (Paper authors, journals, resolution, methodologies), and then
+    analyzing said information (ie calculating distances between residues, etc..)
+Depends: R (>= 3.4.3)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+    dplyr,
+    XML,
+    readr,
+    httr,
+    purrr,
+    stringr,
+    ggplot2
+URL: https://github.com/lacoperon/MDScraperTools
+BugReports: https://github.com/lacoperon/MDScraperTools/issues
+RoxygenNote: 6.0.1
