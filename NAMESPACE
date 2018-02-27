@@ -2,3 +2,5 @@
 
 export(getLinkFromPage)
 export(getPDBResults)
+export(getTextValueFromPage)
+export(getTextValuesFromPage)

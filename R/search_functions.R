@@ -100,3 +100,63 @@ getLinkFromPage <- function(url, path, prepend="http://www.rcsb.org") {
   link <- paste(prepend, link, sep="")
   return(link)
 }
+
+#' Web Scraper Function
+#'
+#' This function allows you to scrape the text values within multiple elements,
+#' specified by the xpath `path`, on a particular website referenced by `url`.
+#' This serves as a helper function to scrape sites relevant to
+#' Bioinformatics-based purposes, and as this package is developed I will add
+#' more higher-level functions that scrape from commonly used sites. But in the
+#' meantime (and I'm sure for a long time to come), this will be handy. If you
+#' are trying to scrape one particular element, see `getTextValueFromPage`.
+#'
+#' @param url The url corresponding to the website in question
+#' @param path The xpath associated with the elements we want to grab the text inside
+#'
+#' @keywords web scraping xpath text value
+#' @export
+#' @examples
+#' # This gets the paper authors associated with a structure on RCSB
+#' url <- "http://www.rcsb.org/structure/6B4V"
+#' author_path <- '//*[@id="header_deposition-authors"]'
+#' getAuthorNames <- partial(getTextValueFromPage, path=author_path)
+#' cand_structs$Authors <- substr(getAuthorNames(url), 27, 200)
+getTextValuesFromPage <- function(url, path) {
+  print(url)
+  s <- GET(url)
+  w <- content(s, as='text') # converts s to plaintext of HTML
+  d <- htmlParse(file=content(s, as="text", asText=T))
+  nodes <- getNodeSet(doc=d, path=path)
+  values <- sapply(nodes, xmlValue)
+  return(values)
+}
+
+#' Web Scraper Function
+#'
+#' This function allows you to scrape the text value within a specific element,
+#' specified by the xpath `path`, on a particular website referenced by `url`.
+#' This serves as a helper function to scrape sites relevant to
+#' Bioinformatics-based purposes, and as this package is developed I will add
+#' more higher-level functions that scrape from commonly used sites. But in the
+#' meantime (and I'm sure for a long time to come), this will be handy. If you
+#' are trying to scrape multiple elements per page, see `getTextValuesFromPage`.
+#'
+#' @param url The url corresponding to the website in question
+#' @param path The xpath associated with the elements we want to grab the text inside
+#'
+#' @keywords web scraping xpath text value
+#' @export
+#' @examples
+#' # This gets the paper authors associated with a structure on RCSB
+#' url <- "http://www.rcsb.org/structure/6B4V"
+#' author_path <- '//*[@id="header_deposition-authors"]'
+#' getAuthorNames <- partial(getTextValueFromPage, path=author_path)
+#' cand_structs$Authors <- substr(getAuthorNames(url), 27, 200)
+getTextValueFromPage <- function(url, path) {
+  values <- getTextValuesFromPage(url, path)
+  if (is.null(values[1])) {
+    values <- getTextValuesFromPage(url, path)
+  }
+  return(values[1])
+}
